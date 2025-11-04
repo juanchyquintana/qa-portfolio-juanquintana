@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC-02 Create Employee</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>8cf361aa-dd12-45a6-b12e-328e4dfee159</testCaseGuid>
+   <variableLinks>
+      <testDataLinkId></testDataLinkId>
+      <type>DEFAULT</type>
+      <value></value>
+      <variableId>66548da9-68eb-484f-bcd3-6e78e8cc9790</variableId>
+   </variableLinks>
+   <variable>
+      <defaultValue>''</defaultValue>
+      <description></description>
+      <id>66548da9-68eb-484f-bcd3-6e78e8cc9790</id>
+      <masked>false</masked>
+      <name>employeeId</name>
+   </variable>
+</TestCaseEntity>

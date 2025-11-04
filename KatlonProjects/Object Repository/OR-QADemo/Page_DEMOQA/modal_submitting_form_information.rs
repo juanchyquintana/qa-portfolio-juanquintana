@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebElementEntity>
+   <description></description>
+   <name>modal_submitting_form_information</name>
+   <tag></tag>
+   <elementGuidId>b4752189-418c-4ec2-87ec-bf970e69ae21</elementGuidId>
+   <selectorCollection>
+      <entry>
+         <key>XPATH</key>
+         <value>(.//*[normalize-space(text()) and normalize-space(.)='`'])[1]/following::div[4]</value>
+      </entry>
+      <entry>
+         <key>CSS</key>
+         <value>div.modal-content</value>
+      </entry>
+   </selectorCollection>
+   <selectorMethod>XPATH</selectorMethod>
+   <smartLocatorCollection>
+      <entry>
+         <key>SMART_LOCATOR</key>
+         <value>internal:text=&quot;Thanks for submitting the formLabelValuesStudent Nameasd asdStudent Emailasd@asd&quot;i</value>
+      </entry>
+   </smartLocatorCollection>
+   <smartLocatorEnabled>false</smartLocatorEnabled>
+   <useRalativeImagePath>true</useRalativeImagePath>
+   <webElementProperties>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>tag</name>
+      <type>Main</type>
+      <value>div</value>
+      <webElementGuid>f9a1ce5f-25cf-4795-8f98-f186ffb363a4</webElementGuid>
+   </webElementProperties>
+   <webElementProperties>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>class</name>
+      <type>Main</type>
+      <value>modal-content</value>
+      <webElementGuid>cb1d0ec9-1931-449b-b7d7-dab3a02a0c27</webElementGuid>
+   </webElementProperties>
+   <webElementProperties>
+      <isSelected>true</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>text</name>
+      <type>Main</type>
+      <value>Thanks for submitting the formLabelValuesStudent Nameasd asdStudent Emailasd@asd.comGenderMaleMobile1234567890Date of Birth31 October,2025SubjectsHobbiesPictureAddressState and CityClose</value>
+      <webElementGuid>ddd467a5-2e00-4dbd-a6d4-f7825dd4e7f9</webElementGuid>
+   </webElementProperties>
+   <webElementProperties>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath</name>
+      <type>Main</type>
+      <value>/html[1]/body[@class=&quot;modal-open&quot;]/div[@class=&quot;fade modal show&quot;]/div[@class=&quot;modal-dialog modal-lg&quot;]/div[@class=&quot;modal-content&quot;]</value>
+      <webElementGuid>9d9cf003-450e-44a1-bec1-6ecc0e2c44b1</webElementGuid>
+   </webElementProperties>
+   <webElementXpaths>
+      <isSelected>true</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:neighbor</name>
+      <type>Main</type>
+      <value>(.//*[normalize-space(text()) and normalize-space(.)='`'])[1]/following::div[4]</value>
+      <webElementGuid>288cbb41-ea30-41ed-be16-e54b085789a6</webElementGuid>
+   </webElementXpaths>
+   <webElementXpaths>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:position</name>
+      <type>Main</type>
+      <value>//body/div[5]/div/div</value>
+      <webElementGuid>094f6ce1-8f88-4455-9864-31c2e8957757</webElementGuid>
+   </webElementXpaths>
+   <webElementXpaths>
+      <isSelected>false</isSelected>
+      <matchCondition>equals</matchCondition>
+      <name>xpath:customAttributes</name>
+      <type>Main</type>
+      <value>//div[(text() = 'Thanks for submitting the formLabelValuesStudent Nameasd asdStudent Emailasd@asd.comGenderMaleMobile1234567890Date of Birth31 October,2025SubjectsHobbiesPictureAddressState and CityClose' or . = 'Thanks for submitting the formLabelValuesStudent Nameasd asdStudent Emailasd@asd.comGenderMaleMobile1234567890Date of Birth31 October,2025SubjectsHobbiesPictureAddressState and CityClose')]</value>
+      <webElementGuid>556f6781-4e81-4530-831f-cbc61a5a88a5</webElementGuid>
+   </webElementXpaths>
+</WebElementEntity>

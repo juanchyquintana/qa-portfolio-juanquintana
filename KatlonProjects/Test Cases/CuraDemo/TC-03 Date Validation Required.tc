@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC-03 Date Validation Required</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>ac36ce45-bd5c-4118-8c53-37c5e0f0ae9e</testCaseGuid>
+</TestCaseEntity>

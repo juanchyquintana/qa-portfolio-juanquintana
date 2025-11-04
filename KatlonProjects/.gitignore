@@ -1,0 +1,47 @@
+# --- BUILD & EXECUTION ---
+.gradle/
+build/
+bin/
+Libs/
+Reports/
+output/
+!output/.gitkeep
+.cache/
+tmp/
+.settings/
+.idea/
+.DS_Store
+
+# --- GENERATED FILES ---
+.classpath
+.project
+*.log
+*.tmp
+*.bak
+*.iml
+
+# --- EXECUTION DATA ---
+report/
+execution.properties
+console.log
+katalon.properties
+TestOpsIntegration/
+Libs/CustomKeywords.groovy
+TestOpsConfig/
+
+# --- OS / SYSTEM ---
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# --- RESULTS / SCREENSHOTS / VIDEOS ---
+*.png
+*.jpg
+*.mp4
+*.avi
+*.flv
+
+# --- OPTIONAL (si querés dejar limpio tu repo) ---
+Reports/**/*
+Screenshots/**/*
+Logs/**/*

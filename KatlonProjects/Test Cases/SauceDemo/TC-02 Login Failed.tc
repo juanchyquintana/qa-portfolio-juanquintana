@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description>I try to login with blocked user</description>
+   <name>TC-02 Login Failed</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>88f61963-eab0-4949-a448-3c5d5fd5202c</testCaseGuid>
+</TestCaseEntity>

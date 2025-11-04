@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC-06 Dependient State-City</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>36812392-5f25-4124-a2f8-ac3bc23d468b</testCaseGuid>
+</TestCaseEntity>

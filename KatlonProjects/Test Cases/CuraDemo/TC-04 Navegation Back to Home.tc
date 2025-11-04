@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC-04 Navegation Back to Home</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>17b56f52-6d31-4b95-9e7b-8c540b83160d</testCaseGuid>
+</TestCaseEntity>

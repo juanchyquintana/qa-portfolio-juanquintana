@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC-01 Send Successfuly with all fields</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>d7e84399-1c4b-435c-aaad-610b3c9ee6d1</testCaseGuid>
+   <variableLinks>
+      <testDataLinkId></testDataLinkId>
+      <type>DEFAULT</type>
+      <value></value>
+      <variableId>c781205a-90c7-45a8-8f52-ae08d8758faf</variableId>
+   </variableLinks>
+   <variable>
+      <defaultValue>''</defaultValue>
+      <description></description>
+      <id>c781205a-90c7-45a8-8f52-ae08d8758faf</id>
+      <masked>false</masked>
+      <name>subject</name>
+   </variable>
+</TestCaseEntity>

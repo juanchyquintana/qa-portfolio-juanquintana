@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC-04 Upload File</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>fa7cdf9f-e34e-45e7-89ce-8fc4795f9118</testCaseGuid>
+</TestCaseEntity>

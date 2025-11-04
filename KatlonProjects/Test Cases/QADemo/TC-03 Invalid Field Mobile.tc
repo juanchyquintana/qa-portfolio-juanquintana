@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC-03 Invalid Field Mobile</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>b5fd216a-1e9e-42dd-8a4d-e5192e710019</testCaseGuid>
+</TestCaseEntity>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC-04 Search for recently hired employees</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>53620035-fb69-4887-b49c-d161ffc00dd9</testCaseGuid>
+</TestCaseEntity>

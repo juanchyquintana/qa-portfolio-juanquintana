@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC-05 Handling of Spaces-Accents</name>
+   <tag></tag>
+   <comment></comment>
+   <recordOption>OTHER</recordOption>
+   <testCaseGuid>420e59b5-35ed-4918-95d0-204ef52bae7f</testCaseGuid>
+   <variableLinks>
+      <testDataLinkId></testDataLinkId>
+      <type>DEFAULT</type>
+      <value></value>
+      <variableId>936a5b1d-3053-4de5-93b7-98121a5f13d9</variableId>
+   </variableLinks>
+   <variable>
+      <defaultValue>''</defaultValue>
+      <description></description>
+      <id>936a5b1d-3053-4de5-93b7-98121a5f13d9</id>
+      <masked>false</masked>
+      <name>employeeId</name>
+   </variable>
+</TestCaseEntity>
