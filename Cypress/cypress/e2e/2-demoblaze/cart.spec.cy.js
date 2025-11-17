@@ -124,30 +124,110 @@ describe("Demoblaze - basic e-commerce (Junior Level)", () => {
           .click();
       });
 
-      cy.get("#cartur").should('include.text', "Cart").click();
+    cy.get("#cartur").should("include.text", "Cart").click();
 
-      cy.get("#page-wrapper").should("be.visible").within(() => {
-        cy.get('h2').should('include.text', "Products");
-        cy.get('.table.table-bordered.table-hover.table-striped').should('be.visible');
-        cy.get("tbody tr").should('have.length.at.least', 1).within(() => {
-          cy.get("td img").eq(0).should('be.visible');
-          cy.get("td").eq(1).should("include.text", "Nexus 6")
-          cy.get("td").eq(2).should("include.text", "650")
-          cy.get("td a").should("have.prop", "tagName", "A").should('include.text', "Delete")
-        });
+    cy.get("#page-wrapper")
+      .should("be.visible")
+      .within(() => {
+        cy.get("h2").should("include.text", "Products");
+        cy.get(".table.table-bordered.table-hover.table-striped").should(
+          "be.visible"
+        );
+        cy.get("tbody tr")
+          .should("have.length.at.least", 1)
+          .within(() => {
+            cy.get("td img").eq(0).should("be.visible");
+            cy.get("td").eq(1).should("include.text", "Nexus 6");
+            cy.get("td").eq(2).should("include.text", "650");
+            cy.get("td a")
+              .should("have.prop", "tagName", "A")
+              .should("include.text", "Delete");
+          });
       });
 
-      cy.get(".col-lg-1").should('be.visible').within(() => {
-        cy.get("h2").should("contain.text", "Total")
-        cy.get("#totalp").should('not.contain.text', "$")
-        cy.get("#totalp").should('contain.text', "650")
+    cy.get(".col-lg-1")
+      .should("be.visible")
+      .within(() => {
+        cy.get("h2").should("contain.text", "Total");
+        cy.get("#totalp").should("not.contain.text", "$");
+        cy.get("#totalp").should("contain.text", "650");
         cy.get(".btn.btn-success")
           .should("be.visible")
-          .should('contain.text', "Place Order")
-      })
+          .should("contain.text", "Place Order");
+      });
   });
 
   it("TC-DB04 - Delete a product from Cart", () => {
     cy.title().should("eq", "STORE");
+
+    cy.get("div[id='contcont'] div:nth-child(8)")
+      .should("be.visible")
+      .should("include.text", "Sony vaio i5")
+      .within(() => {
+        cy.get("h4.card-title")
+          .should("be.visible")
+          .should("have.text", "Sony vaio i5");
+
+        cy.get("h5")
+          .should("be.visible")
+          .should("contain.text", "$")
+          .should("have.text", "$790");
+
+        cy.get("h4.card-title").click();
+      });
+
+    cy.get(".btn.btn-success.btn-lg")
+      .should("be.visible")
+      .should("have.prop", "tagName", "A")
+      .should("have.text", "Add to cart")
+      .click();
+
+    cy.get("#cartur").should("include.text", "Cart").click();
+
+    cy.get("#tbodyid .success > td:nth-child(3)").should("have.text", "790");
+    cy.get(".success").should("be.visible").should("have.length", 1);
+    cy.get(".success")
+      .first()
+      .find("td a")
+      .should("include.text", "Delete")
+      .click();
+
+    cy.get(".success").should("have.length", 0);
+    cy.get("#tbodyid .success > td:nth-child(3)").should("not.exist");
+  });
+
+  it("TC-DB05 - Navigate to Category/Detail/Back", () => {
+    cy.title().should('eq', "STORE")
+
+    cy.get("body > div:nth-child(6) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > a:nth-child(2)")
+    .should('be.visible')
+    .should('contain.text', "Phones")
+    .should("have.prop", "tagName", "A")
+    .click();
+
+    cy.get("div[id='contcont'] div:nth-child(6)")
+      .should("be.visible")
+      .should("include.text", "Sony xperia z5")
+      .within(() => {
+        cy.get("h4.card-title")
+          .should("be.visible")
+          .should("have.text", "Sony xperia z5");
+
+        cy.get("h5")
+          .should("be.visible")
+          .should("contain.text", "$")
+          .should("have.text", "$320");
+
+        cy.get("h4.card-title").click();
+      });
+
+    cy.go('back');
+
+    cy.wait(500)
+
+    cy.get("#tbodyid").should('be.visible').within(() => {
+      cy.contains("Sony xperia z5").should("be.visible");
+      cy.contains("Sony vaio i5").should("not.exist");
+    })
   })
 });
