@@ -54,7 +54,6 @@ describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Interm
     cy.get("#calcForm").should("be.visible");
     cy.get("#errorMsgField").should("not.be.visible");
 
-
     // Data Test
     cy.get("#number1Field").should("have.value", "");
     cy.get("#number2Field").should("have.value", "");
@@ -82,10 +81,58 @@ describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Interm
       .click();
 
     // Expected Result
-    cy.get("#numberAnswerField").should("not.be.visible").should("have.value", "");
+    cy.get("#numberAnswerField")
+      .should("not.be.visible")
+      .should("have.value", "");
 
     cy.get("#errorMsgField")
       .should("be.visible")
       .should("contain.text", "Divide by zero error!");
+  });
+
+  it("TC-03 - Decimals", () => {
+    const number1Field = 1.5;
+    const number2Field = 2.25;
+    const operationResult = number1Field + number2Field;
+
+    // Pre Conditions
+    cy.title().should("eq", "Basic Calculator");
+    cy.get("#calcForm").should("be.visible");
+
+    // Data Test
+    cy.get("#number1Field").should("have.value", "");
+    cy.get("#number2Field").should("have.value", "");
+    cy.get("#numberAnswerField").should("have.value", "");
+    cy.get("#integerSelect").should("not.be.checked");
+    cy.get("#errorMsgField").should("not.be.visible");
+
+    // Steps
+    cy.get("#number1Field")
+      .type(number1Field)
+      .should("have.value", number1Field.toString());
+
+    cy.get("#number2Field")
+      .type(number2Field)
+      .should("have.value", number2Field.toString());
+
+    cy.get("#selectOperationDropdown")
+      .should("have.value", "0")
+      .find("option:selected")
+      .should("have.text", "Add");
+
+    cy.get("#calculateButton").click();
+
+    // Expected Result with tolerance
+    cy.get("#numberAnswerField")
+      .should("be.visible")
+      .invoke("val")
+      .then((actualValue) => {
+        const actual = parseFloat(actualValue);
+        const expected = operationResult;
+
+        expect(actual).to.be.closeTo(expected, 0.001);
+      });
+      
+      cy.get("#errorMsgField").should("not.be.visible");
   });
 });
