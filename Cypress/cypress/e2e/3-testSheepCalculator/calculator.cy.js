@@ -1,4 +1,12 @@
 describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Intermediate Level)", () => {
+  let testCalculatorData;
+  
+  before(() => {
+    cy.fixture("calculatorTest").then((testData) => {
+      testCalculatorData = testData;
+    });
+  });
+
   beforeEach(() => {
     cy.visit("https://testsheepnz.github.io/BasicCalculator.html");
   });
@@ -175,7 +183,7 @@ describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Interm
     cy.get("#errorMsgField").should("not.be.visible");
   });
 
-  it.only("TC-05 - Not numeric operation", () => {
+  it("TC-05 - Not numeric operation", () => {
     const number1Field = "abc";
     const number2Field = 3;
 
@@ -210,7 +218,45 @@ describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Interm
     // Expected Result
     cy.get("#numberAnswerField").should("have.value", "");
     cy.get("#errorMsgField")
-        .should("be.visible")
-        .should("contain.text", "Number 1 is not a number");
+      .should("be.visible")
+      .should("contain.text", "Number 1 is not a number");
+  });
+
+  it("TC-06 - Use Fixture Data-Drive", () => {
+    const operationResult =
+      testCalculatorData.firstNumber + testCalculatorData.secondNumber;
+
+    // Pre Conditions
+    cy.title().should("eq", "Basic Calculator");
+    cy.get("#calcForm").should("be.visible");
+
+    // Data Test
+    cy.get("#number1Field").should("have.value", "");
+    cy.get("#number2Field").should("have.value", "");
+    cy.get("#numberAnswerField").should("have.value", "");
+    cy.get("#integerSelect").should("not.be.checked");
+    cy.get("#errorMsgField").should("not.be.visible");
+
+    // Steps
+    cy.get("#number1Field")
+      .type(testCalculatorData.firstNumber)
+      .should("have.value", testCalculatorData.firstNumber.toString());
+    cy.get("#number2Field")
+      .type(testCalculatorData.secondNumber)
+      .should("have.value", testCalculatorData.secondNumber.toString());
+
+    cy.get("#selectOperationDropdown")
+      .should("have.value", testCalculatorData.operation.value)
+      .find("option:selected")
+      .should("have.text", testCalculatorData.operation.name);
+
+    cy.get("#calculateButton").click();
+
+    // Expected Result
+    cy.get("#numberAnswerField")
+      .should("be.visible")
+      .should("have.value", operationResult.toString());
+
+    cy.get("#errorMsgField").should("not.be.visible");
   });
 });
