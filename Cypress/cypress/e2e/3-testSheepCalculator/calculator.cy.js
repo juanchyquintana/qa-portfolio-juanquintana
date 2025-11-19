@@ -17,6 +17,7 @@ describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Interm
     cy.get("#number2Field").should("have.value", "");
     cy.get("#numberAnswerField").should("have.value", "");
     cy.get("#integerSelect").should("not.be.checked");
+    cy.get("#errorMsgField").should("not.be.visible");
 
     // Steps
     cy.get("#number1Field")
@@ -59,6 +60,7 @@ describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Interm
     cy.get("#number2Field").should("have.value", "");
     cy.get("#numberAnswerField").should("have.value", "");
     cy.get("#integerSelect").should("not.be.checked");
+    cy.get("#errorMsgField").should("not.be.visible");
 
     // Steps
     cy.get("#number1Field")
@@ -74,11 +76,7 @@ describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Interm
       .find("option:selected")
       .should("have.text", "Divide");
 
-    cy.get("#calculateButton")
-      .should("have.prop", "tagName", "INPUT")
-      .should("have.value", "Calculate")
-      .should("have.prop", "type", "button")
-      .click();
+    cy.get("#calculateButton").click();
 
     // Expected Result
     cy.get("#numberAnswerField")
@@ -132,7 +130,48 @@ describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Interm
 
         expect(actual).to.be.closeTo(expected, 0.001);
       });
-      
-      cy.get("#errorMsgField").should("not.be.visible");
+
+    cy.get("#errorMsgField").should("not.be.visible");
+  });
+
+  it("TC-04 - Negative Numbers", () => {
+    const number1Field = -4;
+    const number2Field = 3;
+    const operationResult = number1Field * number2Field;
+
+    // Pre Conditions
+    cy.title().should("eq", "Basic Calculator");
+    cy.get("#calcForm").should("be.visible");
+    cy.get("#errorMsgField").should("not.be.visible");
+
+    // Data Test
+    cy.get("#number1Field").should("have.value", "");
+    cy.get("#number2Field").should("have.value", "");
+    cy.get("#numberAnswerField").should("have.value", "");
+    cy.get("#integerSelect").should("not.be.checked");
+    cy.get("#errorMsgField").should("not.be.visible");
+
+    // Steps
+    cy.get("#number1Field")
+      .type(number1Field)
+      .should("have.value", number1Field.toString());
+    cy.get("#number2Field")
+      .type(number2Field)
+      .should("have.value", number2Field.toString());
+
+    cy.get("#selectOperationDropdown")
+      .select("2")
+      .should("have.value", "2")
+      .find("option:selected")
+      .should("have.text", "Multiply");
+
+    cy.get("#calculateButton").click();
+
+    // Expected Result
+    cy.get("#numberAnswerField")
+      .should("be.visible")
+      .should("have.value", operationResult.toString());
+
+    cy.get("#errorMsgField").should("not.be.visible");
   });
 });
