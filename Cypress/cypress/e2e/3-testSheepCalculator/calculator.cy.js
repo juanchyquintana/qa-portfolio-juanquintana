@@ -174,4 +174,43 @@ describe("TestSheepNZ Basic Calculator — Functional Validations (Junior-Interm
 
     cy.get("#errorMsgField").should("not.be.visible");
   });
+
+  it.only("TC-05 - Not numeric operation", () => {
+    const number1Field = "abc";
+    const number2Field = 3;
+
+    // Pre Conditions
+    cy.title().should("eq", "Basic Calculator");
+    cy.get("#calcForm").should("be.visible");
+    cy.get("#errorMsgField").should("not.be.visible");
+
+    // Data Test
+    cy.get("#number1Field").should("have.value", "");
+    cy.get("#number2Field").should("have.value", "");
+    cy.get("#numberAnswerField").should("have.value", "");
+    cy.get("#integerSelect").should("not.be.checked");
+    cy.get("#errorMsgField").should("not.be.visible");
+
+    // Steps
+    cy.get("#number1Field")
+      .type(number1Field)
+      .should("have.value", number1Field.toString());
+    cy.get("#number2Field")
+      .type(number2Field)
+      .should("have.value", number2Field.toString());
+
+    cy.get("#selectOperationDropdown")
+      .select("0")
+      .should("have.value", "0")
+      .find("option:selected")
+      .should("have.text", "Add");
+
+    cy.get("#calculateButton").click();
+
+    // Expected Result
+    cy.get("#numberAnswerField").should("have.value", "");
+    cy.get("#errorMsgField")
+        .should("be.visible")
+        .should("contain.text", "Number 1 is not a number");
+  });
 });
