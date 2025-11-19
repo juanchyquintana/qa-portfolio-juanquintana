@@ -23,11 +23,3 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-Cypress.Commands.add("iniciarSesion", (correo) => {
-    cy.visit('http://logofree.esy.es/');
-    cy.get('.nav-menu > .page-item-8 > a').click(); // Hacemos clic en Mi cuenta
-    cy.get('#reg_email').type(correo); //Tipeamos el correo en el text-box
-    cy.get('.woocommerce-Button').click(); //Hacemos clic en el botón de logueo
-    cy.get('.nav-menu > :nth-child(1) > a').click() //Hacemos clic en Home
-})
