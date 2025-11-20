@@ -97,7 +97,7 @@ describe("Todo List (james) — SPA CRUD (Intermediate Level)", () => {
       .should("contain.text", "Pagar gas - Edited");
   });
 
-  it.only("TC-04 - Delete Task", () => {
+  it("TC-04 - Delete Task", () => {
     cy.title().should("eq", "To Do List");
 
     cy.get(".todo-form input")
@@ -122,5 +122,23 @@ describe("Todo List (james) — SPA CRUD (Intermediate Level)", () => {
             expect(parseInt(newValue)).to.eq(parseInt(lastValue) - 1);
           });
       });
+  });
+
+  it.only("TC-05 - Active Filter", () => {
+    cy.title().should("eq", "To Do List");
+
+    cy.createTask("Tarea Activa");
+    cy.createTask("Tarea Ejemplo Activa");
+    cy.createTask("Tarea Completada");
+
+    cy.checkStatusOfTask("Tarea Completada", "completed")
+
+    cy.contains('a', "active").should('be.visible').click();
+
+    cy.get(".todo-list li").should('have.length', 2)
+    cy.contains(".todo-list li", "Tarea Completada").should("not.exist");
+    cy.get(".todo-list li").each((tasks) => {
+      cy.wrap(tasks).should("not.have.class", "completed")
+    })
   });
 });

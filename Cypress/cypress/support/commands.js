@@ -24,11 +24,26 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+Cypress.Commands.add("visitInSameTab", (url) => {
+  cy.on("window:before:load", (win) => {
+    cy.stub(win, "open")
+      .as("windowOpen")
+      .callsFake(() => {
+        cy.visit(url);
+      });
+  });
+});
 
-Cypress.Commands.add('visitInSameTab', (url) => {
-    cy.on("window:before:load", (win) => {
-        cy.stub(win, 'open').as("windowOpen").callsFake(() => {
-            cy.visit(url)
-        })
-    })
-})
+// Task Commands - To Do List James
+Cypress.Commands.add("createTask", (task) => {
+  cy.get(".todo-form input").type(`${task}{enter}`);
+});
+
+Cypress.Commands.add("checkStatusOfTask", (task, status) => {
+  cy.contains("li", task)
+    .should("not.have.class", status)
+    .find("input")
+    .click({ multiple: true, force: true });
+
+  cy.contains("li", task).should("have.class", status);
+});
