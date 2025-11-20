@@ -27,7 +27,7 @@ describe("Todo List (james) — SPA CRUD (Intermediate Level)", () => {
       .should("contain.text", "1");
   });
 
-  it.only("TC-02 - Task Completed and Filter", () => {
+  it("TC-02 - Task Completed and Filter", () => {
     cy.title().should("eq", "To Do List");
 
     // Pre Conditions
@@ -74,5 +74,26 @@ describe("Todo List (james) — SPA CRUD (Intermediate Level)", () => {
       "not.contain.text",
       "Reportar el bug del TC-01"
     );
+  });
+
+  it("TC-03 - Edit Task", () => {
+    cy.title().should("eq", "To Do List");
+
+    cy.get(".todo-form input")
+      .type("Mandar Correo{enter}")
+      .type("Pagar luz{enter}");
+
+    cy.contains("li", "Pagar luz").find("label").dblclick();
+
+    cy.contains("li", "Pagar luz")
+      .should("have.class", "editing")
+      .find("input.edit")
+      .clear()
+      .type("Pagar gas - Edited{enter}");
+
+    cy.contains("li", "Pagar gas - Edited")
+      .find("label")
+      .should("be.visible")
+      .should("contain.text", "Pagar gas - Edited");
   });
 });
