@@ -96,4 +96,31 @@ describe("Todo List (james) — SPA CRUD (Intermediate Level)", () => {
       .should("be.visible")
       .should("contain.text", "Pagar gas - Edited");
   });
+
+  it.only("TC-04 - Delete Task", () => {
+    cy.title().should("eq", "To Do List");
+
+    cy.get(".todo-form input")
+      .type("Tarea con vida{enter}")
+      .type("Tarea a eliminar{enter}");
+
+    cy.get("strong.ng-binding")
+      .should("be.visible")
+      .invoke("text")
+      .then((lastValue) => {
+        cy.contains("li", "Tarea a eliminar")
+          .trigger("mouseover")
+          .find("button.destroy")
+          .click({ force: true });
+
+        cy.get(".todo-list").should("not.contain.text", "Tarea a eliminar");
+
+        cy.get("strong.ng-binding")
+          .should("be.visible")
+          .invoke("text")
+          .then((newValue) => {
+            expect(parseInt(newValue)).to.eq(parseInt(lastValue) - 1);
+          });
+      });
+  });
 });
