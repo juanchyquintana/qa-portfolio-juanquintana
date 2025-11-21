@@ -124,7 +124,7 @@ describe("Todo List (james) — SPA CRUD (Intermediate Level)", () => {
       });
   });
 
-  it.only("TC-05 - Active Filter", () => {
+  it("TC-05 - Active Filter", () => {
     cy.title().should("eq", "To Do List");
 
     cy.createTask("Tarea Activa");

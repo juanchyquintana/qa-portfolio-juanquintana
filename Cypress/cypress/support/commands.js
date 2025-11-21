@@ -47,3 +47,22 @@ Cypress.Commands.add("checkStatusOfTask", (task, status) => {
 
   cy.contains("li", task).should("have.class", status);
 });
+
+
+// Pet Store Commands
+Cypress.Commands.add("searchPet", (pets) => {
+      cy.get("#SearchContent form")
+      .find("input[name='keyword']")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.value", "")
+      .type(pets);
+
+    cy.get("#SearchContent form")
+      .find("input[name='searchProducts']")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.value", "Search")
+      .click();
+
+})
