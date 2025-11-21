@@ -66,3 +66,17 @@ Cypress.Commands.add("searchPet", (pets) => {
       .click();
 
 })
+
+Cypress.Commands.add("checkConsistencyInfo", (alias, rowIndex) => {
+      cy.get(alias).then((value) => {
+      const expected = value.trim();
+
+      cy.get("tbody tr")
+        .eq(rowIndex)
+        .invoke("text")
+        .then((rawText) => {
+          const normalized = rawText.replace(/\s+/g, " ").trim();
+          expect(normalized).to.include(expected);
+        });
+    });
+})

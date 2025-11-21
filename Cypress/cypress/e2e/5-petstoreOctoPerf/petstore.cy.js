@@ -6,8 +6,8 @@ describe("Petstore — catalog and consistency user interface/network (Intermedi
   it("TC-01 - Search by keyword", () => {
     cy.title().should("eq", "JPetStore Demo");
 
-    cy.searchPet("fish")
-    
+    cy.searchPet("fish");
+
     cy.get("#Catalog table tbody tr")
       .should("be.visible")
       .its("length")
@@ -41,5 +41,51 @@ describe("Petstore — catalog and consistency user interface/network (Intermedi
             });
         });
     });
+  });
+
+  it.only("TC-02 - Consistency listing→detail", () => {
+    cy.title().should("eq", "JPetStore Demo");
+
+    cy.get("div[id='QuickLinks'] a:nth-child(1)")
+      .should("be.visible")
+      .should("have.prop", "tagName", "A")
+      .click();
+
+    cy.get("div[id='Catalog'] h2")
+      .should("be.visible")
+      .should("have.text", "Fish");
+
+    cy.get("tbody tr:nth-child(2) td:nth-child(2)").should(
+      "have.text",
+      "Angelfish"
+    );
+
+    cy.get("a[href='/actions/Catalog.action?viewProduct=&productId=FI-SW-01']")
+      .should("be.visible")
+      .should("have.prop", "tagName", "A")
+      .should("have.text", "FI-SW-01")
+      .click();
+
+    cy.get("div[id='Catalog'] h2")
+      .should("be.visible")
+      .should("have.text", "Angelfish");
+
+    cy.get("#Catalog table tbody tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td").eq(0).find("a").invoke("text").as("itemId");
+        cy.get("td").eq(2).invoke("text").as("name");
+        cy.get("td").eq(3).invoke("text").as("price");
+      });
+
+    cy.get("a[href='/actions/Catalog.action?viewItem=&itemId=EST-1']")
+      .should("be.visible")
+      .should("have.prop", "tagName", "A")
+      .should("have.text", "EST-1")
+      .click();
+
+    cy.checkConsistencyInfo("@itemId", 1);
+    cy.checkConsistencyInfo("@name", 2);
+    cy.checkConsistencyInfo("@price", 5);
   });
 });
