@@ -43,7 +43,7 @@ describe("Petstore — catalog and consistency user interface/network (Intermedi
     });
   });
 
-  it.only("TC-02 - Consistency listing→detail", () => {
+  it("TC-02 - Consistency listing→detail", () => {
     cy.title().should("eq", "JPetStore Demo");
 
     cy.get("div[id='QuickLinks'] a:nth-child(1)")
@@ -87,5 +87,29 @@ describe("Petstore — catalog and consistency user interface/network (Intermedi
     cy.checkConsistencyInfo("@itemId", 1);
     cy.checkConsistencyInfo("@name", 2);
     cy.checkConsistencyInfo("@price", 5);
+  });
+
+  it.only("TC-03 - Navigation by Category", () => {
+    cy.title().should("eq", "JPetStore Demo");
+
+    cy.xpath("//div[@id='QuickLinks']//a[contains(@href, 'REPTILES')]")
+      .should("be.visible")
+      .should("have.prop", "tagName", "A")
+      .click();
+
+    cy.url().should("include", "categoryId=REPTILES");
+
+    cy.get("#Catalog table tbody tr:has(td)")
+      .should("have.length.at.least", 1)
+      .each((row) => {
+        cy.wrap(row)
+          .find("td")
+          .first()
+          .invoke("text")
+          .should("match", /RP-\w+/);
+      });
+
+    // NOTA - Paginar si aplica: N/A (la página no presenta paginación para esta categoría)
+    // NOTE - Pagination if applicable: N/A (the page does not have pagination for this category)
   });
 });
