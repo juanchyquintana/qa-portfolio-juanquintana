@@ -89,7 +89,7 @@ describe("Petstore — catalog and consistency user interface/network (Intermedi
     cy.checkConsistencyInfo("@price", 5);
   });
 
-  it.only("TC-03 - Navigation by Category", () => {
+  it("TC-03 - Navigation by Category", () => {
     cy.title().should("eq", "JPetStore Demo");
 
     cy.xpath("//div[@id='QuickLinks']//a[contains(@href, 'REPTILES')]")
@@ -111,5 +111,41 @@ describe("Petstore — catalog and consistency user interface/network (Intermedi
 
     // NOTA - Paginar si aplica: N/A (la página no presenta paginación para esta categoría)
     // NOTE - Pagination if applicable: N/A (the page does not have pagination for this category)
+  });
+
+  it.skip("TC-04 - Breadcrumbs back", () => {
+    /**
+     * TC-PET04 - Breadcrumbs back
+     *
+     * Estado: Bloqueado / No automatizado
+     *
+     * Motivo:
+     *  - El requerimiento indica: "Ir de categoria a item y de volver con breadcumbs".
+     *  - La aplicacion JPetStore Demo NO implementa breadcrumbs navegables en la vista de detalle.
+     *  - Solo existe un link "Return to K9-BD-01", que no corresponde a navegacion por breadcrumbs.
+     *
+     * Decision:
+     *  - Este TC se deja como 'it.skip' para documentar que el requerimiento no puede ser verificado
+     *    en este entorno.
+     *
+     * ---
+     *
+     *  Status: Blocked / Not automated
+     *
+     *  Reason:
+     *   - Requirement states: "Navigate from category to item and return using breadcrumbs".
+     *   - JPetStore Demo does NOT implement breadcrumb navigation in the item detail view.
+     *   - Only a "Return to K9-BD-01" link is available, which is NOT real breadcrumb navigation.
+     *
+     *  Decision:
+     *   - This test is marked as 'it.skip' to reflect that the requirement
+     *     cannot be validated in this environment.
+     */
+
+    cy.title().should("eq", "JPetStore Demo");
+
+    // Skipped because breadcrumbs are not implemented in JPetStore Demo
+    // Omitido porque el breadcrumbs no está implementadas en JPetStore Demo.
+    cy.contains("Breadcrumbs").should("be.visible");
   });
 });
