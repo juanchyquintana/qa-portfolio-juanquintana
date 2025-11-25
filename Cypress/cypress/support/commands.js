@@ -48,35 +48,49 @@ Cypress.Commands.add("checkStatusOfTask", (task, status) => {
   cy.contains("li", task).should("have.class", status);
 });
 
-
 // Pet Store Commands
 Cypress.Commands.add("searchPet", (pets) => {
-      cy.get("#SearchContent form")
-      .find("input[name='keyword']")
-      .should("be.visible")
-      .should("have.prop", "tagName", "INPUT")
-      .should("have.value", "")
-      .type(pets);
+  cy.get("#SearchContent form")
+    .find("input[name='keyword']")
+    .should("be.visible")
+    .should("have.prop", "tagName", "INPUT")
+    .should("have.value", "")
+    .type(pets);
 
-    cy.get("#SearchContent form")
-      .find("input[name='searchProducts']")
-      .should("be.visible")
-      .should("have.prop", "tagName", "INPUT")
-      .should("have.value", "Search")
-      .click();
-
-})
+  cy.get("#SearchContent form")
+    .find("input[name='searchProducts']")
+    .should("be.visible")
+    .should("have.prop", "tagName", "INPUT")
+    .should("have.value", "Search")
+    .click();
+});
 
 Cypress.Commands.add("checkConsistencyInfo", (alias, rowIndex) => {
-      cy.get(alias).then((value) => {
-      const expected = value.trim();
+  cy.get(alias).then((value) => {
+    const expected = value.trim();
 
-      cy.get("tbody tr")
-        .eq(rowIndex)
-        .invoke("text")
-        .then((rawText) => {
-          const normalized = rawText.replace(/\s+/g, " ").trim();
-          expect(normalized).to.include(expected);
-        });
-    });
-})
+    cy.get("tbody tr")
+      .eq(rowIndex)
+      .invoke("text")
+      .then((rawText) => {
+        const normalized = rawText.replace(/\s+/g, " ").trim();
+        expect(normalized).to.include(expected);
+      });
+  });
+});
+
+// Demo Web Shops Commands
+Cypress.Commands.add("searchProducts", (product) => {
+  // Get search input and button
+  cy.get("#small-searchterms")
+    .should("be.visible")
+    .should("have.prop", "type", "text")
+    .should("have.value", "Search store")
+    .type(product);
+
+  cy.get("input.button-1.search-box-button")
+    .should("be.visible")
+    .should("have.prop", "type", "submit")
+    .should("have.value", "Search")
+    .click();
+});
