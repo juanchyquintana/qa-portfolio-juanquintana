@@ -117,7 +117,7 @@ describe("Demo Web Shop (Tricentis) — Searchs, filters and checkout (Senior Le
     });
   });
 
-  it.only("TC-02 - Cart Multi-Products", () => {
+  it("TC-02 - Cart Multi-Products", () => {
     cy.title().should("eq", title);
 
     // Add First product to cart = Book
@@ -210,6 +210,149 @@ describe("Demo Web Shop (Tricentis) — Searchs, filters and checkout (Senior Le
       cy.calculateSubTotalCart().then((secondSubtotal) => {
         expect(secondSubtotal).to.not.eq(firstSubtotal);
       });
+    });
+  });
+
+  it.skip("TC-03 - Valid Coupon", () => {
+    /**
+     * TC-DWS03 – Cupón válido / Valid Coupon
+     * Estado / Status: BLOQUEADO / BLOCKED
+     *
+     * Motivo / Reason:
+     * - La web demo (Demo Web Shop / nopCommerce demo) no provee códigos de cupón válidos.
+     * - Aunque la solicitud POST /cart responde con HTTP 200 OK,
+     *   la interfaz siempre muestra el mensaje:
+     *     “The coupon code you entered couldn't be applied to your order”.
+     * - No se visualiza una línea de "Descuento" ni se modifica el total del carrito.
+     *
+     * - The demo web (Demo Web Shop / nopCommerce demo) does not provide valid coupon codes.
+     * - Even if POST /cart returns HTTP 200 OK,
+     *   the UI always displays the message:
+     *     “The coupon code you entered couldn't be applied to your order”.
+     * - No “Discount” row is shown and the total price remains unchanged.
+     *
+     * Decisión / Decision:
+     * - El escenario se automatiza parcialmente:
+     *     ✓ Validación del request con intercept (statusCode === 200)
+     *     ✓ Verificación del mensaje mostrado en UI
+     *     ✓ Confirmación de que el total del carrito no cambia
+     *
+     * - The scenario is partially automated:
+     *     ✓ Request validated using intercept (statusCode === 200)
+     *     ✓ UI error message validated
+     *     ✓ Cart total confirmed unchanged
+     *
+     * Resultado / Result:
+     * - El escenario exitoso (cupón válido con descuento aplicado)
+     *   queda marcado como BLOQUEADO por limitaciones del entorno.
+     *
+     * - The successful path (valid coupon with discount applied)
+     *   is marked as BLOCKED due to environment limitations.
+     */
+
+    cy.title().should("eq", title);
+
+    cy.menuCategoryProduct("Computers");
+    cy.xpath("(//div[@class='sub-category-item'])[2]")
+      .should("be.visible")
+      .click();
+
+    cy.get("input[value='Add to cart']")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.prop", "type", "button")
+      .should("have.value", "Add to cart")
+      .click();
+
+    cy.menuCategoryProduct("Digital downloads");
+    cy.xpath("(//input[@value='Add to cart'])[2]")
+      .should("be.visible")
+      .should("have.prop", "type", "button")
+      .should("have.value", "Add to cart")
+      .click();
+
+    cy.get("#topcartlink a.ico-cart").click();
+
+    cy.calculateSubTotalCart().then((subtotalBefore) => {
+      cy.intercept("POST", "**/cart").as("applyCoupon");
+
+      cy.get("input.discount-coupon-code")
+        .should("be.visible")
+        .type("FAKE-TEST-10OFF");
+
+      cy.get("input[value='Apply coupon']").should("be.visible").click();
+
+      cy.wait("@applyCoupon").its("response.statusCode").should("eq", 200);
+
+      cy.get("div.message")
+        .should("be.visible")
+        .should("contain.text", "The coupon was applied ");
+
+      cy.contains("td.cart-total-left", "Discount").should("exist");
+
+      cy.contains("td.cart-total-left", "Total:")
+        .next("td.cart-total-right")
+        .find(".product-price")
+        .invoke("text")
+        .then((totalCart) => {
+          const total = parseFloat(totalCart.replace(/[^0-9.-]/g, ""));
+          const expected = parseFloat(subtotalBefore);
+          expect(total).to.eq(expected);
+        });
+    });
+  });
+
+  it("TC-03 - Invalid coupon - Intercept & total unchanged", () => {
+
+    cy.title().should("eq", title);
+
+    cy.menuCategoryProduct("Computers");
+    cy.xpath("(//div[@class='sub-category-item'])[2]")
+      .should("be.visible")
+      .click();
+
+    cy.get("input[value='Add to cart']")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.prop", "type", "button")
+      .should("have.value", "Add to cart")
+      .click();
+
+    cy.menuCategoryProduct("Digital downloads");
+    cy.xpath("(//input[@value='Add to cart'])[2]")
+      .should("be.visible")
+      .should("have.prop", "type", "button")
+      .should("have.value", "Add to cart")
+      .click();
+
+    cy.get("#topcartlink a.ico-cart").click();
+
+    cy.calculateSubTotalCart().then((subtotalBefore) => {
+      cy.intercept("POST", "**/cart").as("applyCoupon");
+
+      cy.get("input.discount-coupon-code")
+        .should("be.visible")
+        .type("FAKE-TEST-10OFF");
+
+      cy.get("input[value='Apply coupon']").should("be.visible").click();
+
+      cy.wait("@applyCoupon").its("response.statusCode").should("eq", 200);
+
+      cy.get("div.message")
+        .should("be.visible")
+        .should("contain.text", "The coupon code you entered couldn't be applied to your order");
+
+      cy.contains("td.cart-total-left", "Discount").should("not.exist");
+
+      cy.contains("td.cart-total-left", "Total:")
+        .next("td.cart-total-right")
+        .find(".product-price")
+        .invoke("text")
+        .then((totalCart) => {
+          const total = parseFloat(totalCart.replace(/[^0-9.-]/g, ""));
+          const expected = parseFloat(subtotalBefore);
+          expect(total).to.eq(expected);
+        });
     });
   });
 });
