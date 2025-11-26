@@ -117,5 +117,99 @@ describe("Demo Web Shop (Tricentis) — Searchs, filters and checkout (Senior Le
     });
   });
 
-  
+  it.only("TC-02 - Cart Multi-Products", () => {
+    cy.title().should("eq", title);
+
+    // Add First product to cart = Book
+    cy.menuCategoryProduct("Books");
+
+    cy.xpath("(//input[@value='Add to cart'])[1]")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.prop", "type", "button")
+      .should("have.value", "Add to cart")
+      .click();
+
+    cy.checkNotificationVisibility(); // Validate success notificacion message
+
+    // Add Second product to cart = Computer
+    cy.menuCategoryProduct("Computers");
+    cy.xpath("(//div[@class='sub-category-item'])[2]")
+      .should("be.visible")
+      .click();
+
+    cy.get("input[value='Add to cart']")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.prop", "type", "button")
+      .should("have.value", "Add to cart")
+      .click();
+
+    cy.checkNotificationVisibility(); // Validate success notificacion message
+
+    cy.menuCategoryProduct("Gift Cards");
+    cy.xpath("(//input[@value='Add to cart'])[1]")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.prop", "type", "button")
+      .should("have.value", "Add to cart")
+      .click();
+
+    cy.get("#giftcard_1_RecipientName")
+      .should("be.visible")
+      .should("have.value", "")
+      .type("Recipient Test");
+    cy.get("#giftcard_1_RecipientEmail")
+      .should("be.visible")
+      .should("have.value", "")
+      .type("recipient@test.com");
+
+    cy.get("#giftcard_1_SenderName")
+      .should("be.visible")
+      .should("have.value", "")
+      .type("Rocco");
+    cy.get("#giftcard_1_SenderEmail")
+      .should("be.visible")
+      .should("have.value", "")
+      .type("rocco@test.com");
+
+    cy.get("#add-to-cart-button-1")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.prop", "type", "button")
+      .should("have.value", "Add to cart")
+      .click();
+
+    cy.checkNotificationVisibility(); // Validate success notificacion message
+
+    cy.get("#topcartlink")
+      .should("be.visible")
+      .find("a.ico-cart")
+      .should("contain.text", "Shopping cart")
+      .click();
+
+    cy.calculateSubTotalCart().then((firstSubtotal) => {
+      cy.get("tr.cart-item-row")
+        .eq(0)
+        .find("input.qty-input")
+        .clear()
+        .type("1");
+      cy.get("tr.cart-item-row")
+        .eq(1)
+        .find("input.qty-input")
+        .clear()
+        .type("2");
+      cy.get("tr.cart-item-row")
+        .eq(2)
+        .find("input.qty-input")
+        .clear()
+        .type("3");
+
+      cy.contains("input", "Update shopping cart").should("be.visible").click();
+
+      cy.calculateSubTotalCart().then((secondSubtotal) => {
+        expect(secondSubtotal).to.not.eq(firstSubtotal);
+      });
+    });
+  });
 });

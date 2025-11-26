@@ -94,3 +94,48 @@ Cypress.Commands.add("searchProducts", (product) => {
     .should("have.value", "Search")
     .click();
 });
+
+Cypress.Commands.add("menuCategoryProduct", (category) => {
+  cy.xpath(`//ul[@class='top-menu']//a[normalize-space()='${category}']`)
+    .should("be.visible")
+    .should("have.prop", "tagName", "A")
+    .should("contains.text", category)
+    .click();
+});
+
+Cypress.Commands.add("checkNotificationVisibility", () => {
+  cy.get("#bar-notification")
+    .should("be.visible")
+    .should("contain.text", "The product has been added to your shopping cart");
+
+  cy.wait(5000);
+
+  cy.get("#bar-notification").should("not.be.visible");
+});
+
+Cypress.Commands.add("calculateSubTotalCart", () => {
+  let expectedSubtotal = 0;
+
+  cy.get("table.cart tr.cart-item-row")
+    .should("be.visible")
+    .each((row) => {
+      cy.wrap(row);
+      const unitPriceText = row.find(".product-unit-price").text();
+      const unitPrice = parseFloat(unitPriceText.replace(/[^0-9.]/g, ""));
+
+      const qtyText = row.find("input.qty-input").val();
+      const quantity = parseInt(qtyText, 10);
+
+      expectedSubtotal += unitPrice * quantity;
+    })
+    .then(() => {
+      cy.contains("td.cart-total-left", "Sub-Total:")
+        .next("td.cart-total-right")
+        .find("span.product-price")
+        .invoke("text")
+        .then((subTotalText) => {
+          const subTotalUI = parseFloat(subTotalText.replace(/[^0-9.]/g, ""));
+          expect(subTotalUI).to.eq(expectedSubtotal);
+        });
+    });
+});
