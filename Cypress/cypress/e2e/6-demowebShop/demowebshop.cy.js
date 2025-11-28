@@ -358,14 +358,8 @@ describe("Demo Web Shop (Tricentis) — Searchs, filters and checkout (Senior Le
     });
   });
 
-  it.only("TC-04 - Checkout as a registered user", () => {
+  it("TC-04 - Checkout as a registered user", () => {
     cy.title().should("eq", title);
-
-    cy.xpath(`//a[normalize-space()='Log in']`)
-      .should("be.visible")
-      .should("have.prop", "tagName", "A")
-      .should("contain.text", "Log in")
-      .click();
 
     cy.loginDWS("rocco@gmail.com", "password"); // Login with commands
 
@@ -551,6 +545,68 @@ describe("Demo Web Shop (Tricentis) — Searchs, filters and checkout (Senior Le
 
     cy.url().then((url) => {
       expect(url).to.include("/orderdetails/");
+    });
+  });
+
+  it.only("TC-05 - Payment Fail (Simulated)", () => {
+    /**
+     * 🔎 TC-DWS05 – Pago fallido (Simulado) / Payment Fail (Simulated)
+     *
+     * NOTA - En el entorno Demo Web Shop, cuando se simula un error 4xx en el endpoint de pago,
+     *        la aplicación redirige al usuario nuevamente al carrito SIN mostrar un mensaje
+     *        explícito de error ni feedback visual en la UI.
+     *
+     * Este test automatizado verifica que:
+     *  - No se genere número de orden.
+     *  - El usuario no llegue a la pantalla de confirmación ("Thank you").
+     *  - El carrito permanezca con los productos cargados para reintentar el pago.
+     *
+     * La validación de mensaje de error NO es posible porque este comportamiento
+     * NO está implementado en esta aplicación demo.
+     *
+     * ----
+     *
+     * NOTE - In the Demo Web Shop environment, when simulating a 4xx error on the payment endpoint,
+     *        the application redirects the user back to the shopping cart WITHOUT displaying any
+     *        clear error message or visual feedback in the UI.
+     *
+     * This automated test verifies that:
+     *  - No order number is generated.
+     *  - The user does not reach the confirmation page ("Thank you").
+     *  - The cart remains available with products to retry payment.
+     *
+     * Error message assertion is NOT included, because such behavior is NOT implemented
+     * in this demo application.
+     */
+
+    cy.title().should("eq", title);
+
+    cy.goToPaymentStepDWS("rocco@gmail.com", "password");
+
+    // Intercept to failed
+    cy.intercept("POST", "**/checkout/**", {
+      statusCode: 422,
+      body: {
+        error: "Payment Failed",
+        message: "Your payment could not be processed.",
+      },
+    }).as("paymentFailed");
+
+    // Send Payment
+    cy.get("input[value='Confirm']").should("be.visible").click();
+
+    cy.wait("@paymentFailed");
+
+    cy.url().should("not.include", "/checkout/completed");
+    cy.url().should("include", "/cart");
+
+    cy.get("div.page-title h1").should("not.contain.text", "Thank you");
+    cy.contains("Order number:").should("not.exist");
+
+    cy.get("table.cart").within(() => {
+      cy.contains("14.1-inch Laptop").should("be.visible");
+      cy.contains("Qty").should("be.visible");
+      cy.contains("Total").should("be.visible");
     });
   });
 });

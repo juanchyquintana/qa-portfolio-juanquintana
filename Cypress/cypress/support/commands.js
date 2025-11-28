@@ -141,6 +141,12 @@ Cypress.Commands.add("calculateSubTotalCart", () => {
 });
 
 Cypress.Commands.add("loginDWS", (email, password) => {
+  cy.xpath(`//a[normalize-space()='Log in']`)
+    .should("be.visible")
+    .should("have.prop", "tagName", "A")
+    .should("contain.text", "Log in")
+    .click();
+
   cy.get("div.title strong")
     .should("be.visible")
     .should("contain.text", "Returning Customer");
@@ -183,5 +189,52 @@ Cypress.Commands.add("loginDWS", (email, password) => {
     .should("have.prop", "tagName", "INPUT")
     .should("have.prop", "type", "submit")
     .should("have.value", "Log in")
-    .click()
+    .click();
+});
+
+Cypress.Commands.add("goToPaymentStepDWS", (email, password) => {
+  // Login
+  cy.xpath(`//a[normalize-space()='Log in']`).click();
+  cy.loginDWS(email, password);
+
+  // Add Product
+  cy.menuCategoryProduct("Computers");
+  cy.xpath("(//div[@class='sub-category-item'])[2]").click();
+  cy.get("input[value='Add to cart']").click();
+
+  // Go to Cart and acept terms
+  cy.get("#topcartlink a.ico-cart").click();
+  cy.get("#termsofservice").check();
+  cy.get("#checkout").click();
+
+  cy.get("body").then((body) => {
+    const hasNewAddressFormVisible =
+      body.find("#BillingNewAddress_Company:visible").length > 0;
+
+    if (hasNewAddressFormVisible) {
+      cy.get("#BillingNewAddress_Company").type("Freelance Company");
+      cy.get("#BillingNewAddress_CountryId").select("3"); // Argentina
+      cy.get("#BillingNewAddress_City").type("Tucuman");
+      cy.get("#BillingNewAddress_Address1").type("Calle 1234");
+      cy.get("#BillingNewAddress_ZipPostalCode").type("4000");
+      cy.get("#BillingNewAddress_PhoneNumber").type("123456789");
+    } else {
+      cy.get("#billing-address-select").should("exist");
+    }
+  });
+
+  cy.get("#billing-buttons-container input.button-1").click();
+
+  // Shipping address
+  cy.get("input[onclick='Shipping.save()']").click();
+
+  // Shipping method
+  cy.get("#shippingoption_1").check();
+  cy.get("input.button-1.shipping-method-next-step-button").click();
+
+  // Payment method (Check / Money Order)
+  cy.get("#paymentmethod_1").check();
+  cy.get("input.button-1.payment-method-next-step-button").click();
+
+  cy.get("input[class='button-1 payment-info-next-step-button']").click();
 });
