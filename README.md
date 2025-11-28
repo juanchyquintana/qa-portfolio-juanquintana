@@ -43,9 +43,25 @@ Incluye casos de prueba ejecutados en:
 ---
 
 ### 🌐 Cypress  
-Automatizaciones enfocadas en UI moderna, validación de inputs, alertas y mensajes de error.  
-Incluye pruebas con intercepts, fixtures y comandos personalizados.  
-📄 Próximamente más detalles en `/Cypress`.
+Automatizaciones E2E con énfasis en **validaciones UI**, **eventos del navegador**, **carritos de compra**, **CRUD**, y **flujos de pago simulados**.  
+Incluye manejo de:
+
+- `cy.intercept()` para **mock y monitoreo** de requests
+- **Custom Commands** para login y checkout reutilizables
+- Validaciones de **totales, cantidades y estados**
+- Aserciones adaptadas a **SPA** y DOM dinámico
+
+📌 Sitios cubiertos:
+
+| Sitio | Tipo de App | Nivel | Casos destacados |
+|-------|-------------|-------|----------------|
+| **Demoblaze** | eCommerce | Junior | Agregar/Quitar productos, alertas |
+| **Basic Calculator (TestSheepNZ)** | Web básica | Junior–Intermedio | Sumas, decimales, errores, ÷0 |
+| **Todo List (James)** | SPA CRUD | Intermedio | Completar, filtrar, editar, borrar |
+| **Petstore OctoPerf** | Catálogo | Intermedio | Consistencia listado ↔ detalle |
+| **Demo Web Shop** | eCommerce completo | Senior | Checkout con usuario + pago fallido con intercept |
+
+📄 Ver más: [Cypress/README.md](./Cypress/README.md)
 
 ---
 
