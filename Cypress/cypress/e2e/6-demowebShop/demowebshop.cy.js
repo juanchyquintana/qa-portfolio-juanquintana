@@ -303,7 +303,6 @@ describe("Demo Web Shop (Tricentis) — Searchs, filters and checkout (Senior Le
   });
 
   it("TC-03 - Invalid coupon - Intercept & total unchanged", () => {
-
     cy.title().should("eq", title);
 
     cy.menuCategoryProduct("Computers");
@@ -340,7 +339,10 @@ describe("Demo Web Shop (Tricentis) — Searchs, filters and checkout (Senior Le
 
       cy.get("div.message")
         .should("be.visible")
-        .should("contain.text", "The coupon code you entered couldn't be applied to your order");
+        .should(
+          "contain.text",
+          "The coupon code you entered couldn't be applied to your order"
+        );
 
       cy.contains("td.cart-total-left", "Discount").should("not.exist");
 
@@ -353,6 +355,202 @@ describe("Demo Web Shop (Tricentis) — Searchs, filters and checkout (Senior Le
           const expected = parseFloat(subtotalBefore);
           expect(total).to.eq(expected);
         });
+    });
+  });
+
+  it.only("TC-04 - Checkout as a registered user", () => {
+    cy.title().should("eq", title);
+
+    cy.xpath(`//a[normalize-space()='Log in']`)
+      .should("be.visible")
+      .should("have.prop", "tagName", "A")
+      .should("contain.text", "Log in")
+      .click();
+
+    cy.loginDWS("rocco@gmail.com", "password"); // Login with commands
+
+    cy.menuCategoryProduct("Computers");
+    cy.xpath("(//div[@class='sub-category-item'])[2]")
+      .should("be.visible")
+      .click();
+
+    cy.get("input[value='Add to cart']")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.prop", "type", "button")
+      .should("have.value", "Add to cart")
+      .click();
+
+    cy.get("#topcartlink a.ico-cart").click();
+
+    cy.get("#termsofservice")
+      .should("be.visible")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.prop", "type", "checkbox")
+      .should("have.attr", "name", "termsofservice")
+      .check();
+
+    cy.get("div.terms-of-service").should(
+      "contain.text",
+      "I agree with the terms of service and I adhere to them unconditionally"
+    );
+
+    cy.get("#checkout")
+      .should("be.visible")
+      .should("have.value", "checkout")
+      .should("have.prop", "tagName", "BUTTON")
+      .should("have.prop", "type", "submit")
+      .click();
+
+    cy.get("body").then((body) => {
+      // ¿El formulario de NUEVA dirección está visible?
+      const hasNewAddressFormVisible =
+        body.find("#BillingNewAddress_Company:visible").length > 0;
+
+      if (hasNewAddressFormVisible) {
+        // Billing Address - Nueva Direccion
+        cy.get("label[for='BillingNewAddress_Company']").should(
+          "have.text",
+          "Company:"
+        );
+        cy.get("#BillingNewAddress_Company").type("Freelance Company");
+
+        cy.get("label[for='BillingNewAddress_CountryId']").should(
+          "have.text",
+          "Country:"
+        );
+        cy.get("#BillingNewAddress_CountryId")
+          .should("be.visible")
+          .select("3")
+          .should("have.value", "3")
+          .find("option:selected")
+          .should("have.text", "Argentina");
+
+        cy.get("label[for='BillingNewAddress_City']").should(
+          "have.text",
+          "City:"
+        );
+        cy.get("#BillingNewAddress_City").type("Tucuman");
+
+        cy.get("label[for='BillingNewAddress_Address1']").should(
+          "have.text",
+          "Address 1:"
+        );
+        cy.get("#BillingNewAddress_Address1").type("Calle 1234");
+
+        cy.get("label[for='BillingNewAddress_ZipPostalCode']").should(
+          "have.text",
+          "Zip / postal code:"
+        );
+        cy.get("#BillingNewAddress_ZipPostalCode").type("4000");
+
+        cy.get("label[for='BillingNewAddress_PhoneNumber']").should(
+          "have.text",
+          "Phone number:"
+        );
+        cy.get("#BillingNewAddress_PhoneNumber").type("123456789");
+      } else {
+        cy.get("#billing-address-select").should("exist");
+      }
+    });
+
+    cy.get("#billing-buttons-container input.button-1")
+      .should("be.visible")
+      .should("have.value", "Continue")
+      .should("have.prop", "type", "button")
+      .click();
+
+    cy.get("input[onclick='Shipping.save()']")
+      .should("be.visible")
+      .should("have.value", "Continue")
+      .should("have.prop", "type", "button")
+      .click();
+
+    cy.get("#shippingoption_1")
+      .should("be.visible")
+      .should("have.prop", "type", "radio")
+      .should("have.attr", "name", "shippingoption")
+      .check();
+
+    cy.get("div.method-name label")
+      .should("be.visible")
+      .should("contain.text", "Next Day Air");
+
+    cy.get("input[class='button-1 shipping-method-next-step-button']")
+      .should("be.visible")
+      .click();
+
+    cy.get("#paymentmethod_1")
+      .should("be.visible")
+      .should("have.value", "Payments.CheckMoneyOrder")
+      .should("have.prop", "tagName", "INPUT")
+      .should("have.prop", "type", "radio")
+      .check();
+
+    cy.get("div[class='payment-details'] label[for='paymentmethod_1']")
+      .should("be.visible")
+      .should("contain.text", "Check / Money Order");
+
+    cy.get("input[class='button-1 payment-method-next-step-button']")
+      .should("be.visible")
+      .click();
+
+    cy.get("input[class='button-1 payment-info-next-step-button']")
+      .should("be.visible")
+      .click();
+
+    // Expect
+    cy.get("div.order-summary-content").within(() => {
+      // Product
+      cy.contains("14.1-inch Laptop").should("be.visible");
+
+      // Subtotal
+      cy.contains("td.cart-total-left", "Sub-Total:")
+        .next("td.cart-total-right")
+        .should("contain.text", "1590.0");
+
+      // Shipping
+      cy.contains("td.cart-total-left", "Shipping:")
+        .next("td.cart-total-right")
+        .should("contain.text", "0.00");
+
+      // Payment fee
+      cy.contains("td.cart-total-left", "Payment method additional fee:")
+        .next("td.cart-total-right")
+        .should("contain.text", "5.00");
+
+      // Total
+      cy.contains("td.cart-total-left", "Total:")
+        .next("td.cart-total-right")
+        .should("contain.text", "1590.0");
+    });
+
+    cy.get("input[value='Confirm']").should("be.visible").click();
+
+    cy.url().should("include", "/checkout/completed");
+
+    cy.get("div.page-title h1")
+      .should("be.visible")
+      .should("have.text", "Thank you");
+
+    cy.get("div.section.order-completed .title strong")
+      .should("be.visible")
+      .should("contain.text", "Your order has been successfully processed!");
+
+    cy.get("ul.details li")
+      .should("be.visible")
+      .invoke("text")
+      .then((text) => {
+        expect(text).to.match(/Order number:\s*\d+/);
+      });
+
+    cy.get("ul.details li a")
+      .should("be.visible")
+      .should("have.text", "Click here for order details.")
+      .click();
+
+    cy.url().then((url) => {
+      expect(url).to.include("/orderdetails/");
     });
   });
 });

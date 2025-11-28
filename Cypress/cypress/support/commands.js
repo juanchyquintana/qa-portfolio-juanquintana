@@ -139,3 +139,49 @@ Cypress.Commands.add("calculateSubTotalCart", () => {
         });
     });
 });
+
+Cypress.Commands.add("loginDWS", (email, password) => {
+  cy.get("div.title strong")
+    .should("be.visible")
+    .should("contain.text", "Returning Customer");
+
+  cy.get("label[for='Email']")
+    .should("be.visible")
+    .should("have.text", "Email:");
+
+  cy.get("#Email")
+    .should("be.visible")
+    .should("have.value", "")
+    .should("have.class", "email")
+    .should("have.attr", "autofocus", "autofocus")
+    .should("have.attr", "name", "Email")
+    .should("have.prop", "tagName", "INPUT")
+    .should("have.prop", "type", "text")
+    .type(email);
+
+  cy.get("label[for='Password']")
+    .should("be.visible")
+    .should("have.text", "Password:");
+
+  cy.get("#Password")
+    .should("be.visible")
+    .should("have.value", "")
+    .should("have.class", "password")
+    .should("have.attr", "name", "Password")
+    .should("have.prop", "tagName", "INPUT")
+    .should("have.prop", "type", "password")
+    .type(password);
+
+  cy.get("#RememberMe")
+    .should("be.visible")
+    .should("have.prop", "tagName", "INPUT")
+    .should("have.value", "true")
+    .check();
+
+  cy.get("input[value='Log in']")
+    .should("be.visible")
+    .should("have.prop", "tagName", "INPUT")
+    .should("have.prop", "type", "submit")
+    .should("have.value", "Log in")
+    .click()
+});
